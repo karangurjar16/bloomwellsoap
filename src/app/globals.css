@@ -1,0 +1,305 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* High-contrast display serif for headings, set bold and uppercase for the
+     big section titles. Registering it here gives `font-display`. */
+  --font-display: var(--font-playfair), ui-serif, Georgia, serif;
+
+  /* Storefront palette, taken from the Bloomwell logo: its deep botanical
+     green does the work black would (buttons, headings), honey is the one
+     warm accent, and blush sits behind product photos, as soap shops do.
+     Kept to these few so the shop reads calm rather than busy. The token
+     names predate the rebrand; every component already uses them, so
+     changing the values here restyles the whole shop at once. */
+  --color-forest: #2d4a2b; /* logo green — pills, links */
+  --color-forest-deep: #1c2e1b; /* ink for headings and prices */
+  --color-forest-soft: #eef1e4; /* sage tint for chips and panels */
+  --color-gold: #eaa92c; /* honey — accent words, badges */
+  --color-gold-deep: #9a6412; /* honey dark enough for small text */
+  --color-gold-soft: #fdf1d6;
+  --color-cream: #fffaf0; /* ivory */
+  --color-blush: #fbe8e3; /* behind product photos */
+  --color-blush-deep: #f5d3cb;
+
+  /* The circular badge on the home page; slow enough to read while it turns. */
+  --animate-spin-slow: spin 22s linear infinite;
+
+  /* Botanical motion (components/shop/Botanicals.tsx). All slow and small:
+     the flowers should feel like they are in a breeze, not performing.
+     Every use pairs with motion-reduce:animate-none. */
+  --animate-spin-slower: spin 90s linear infinite;
+  --animate-float: float 8s ease-in-out infinite;
+  --animate-sway: sway 7s ease-in-out infinite;
+  --animate-petal: petal-fall 14s linear infinite;
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-14px) rotate(4deg);
+    }
+  }
+
+  @keyframes sway {
+    0%,
+    100% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(5deg);
+    }
+  }
+
+  /* Falls the height of the hero (--fall), drifting sideways (--drift) and
+     tumbling (--spin); each petal sets its own via inline style. */
+  @keyframes petal-fall {
+    0% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.9;
+    }
+    85% {
+      opacity: 0.9;
+    }
+    100% {
+      transform: translate3d(var(--drift, 60px), var(--fall, 820px), 0)
+        rotate(var(--spin, 300deg));
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Warm neutrals (Tailwind "stone") rather than pure grey — the palette the
+     storefront already used. Page is off-white, cards are true white, so a
+     panel reads as paper on paper. */
+  --background: oklch(0.985 0.0013 106);
+  --foreground: oklch(0.216 0.0061 56);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.216 0.0061 56);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.216 0.0061 56);
+  --primary: oklch(0.216 0.0061 56);
+  --primary-foreground: oklch(0.985 0.0013 106);
+  --secondary: oklch(0.97 0.0016 106);
+  --secondary-foreground: oklch(0.216 0.0061 56);
+  --muted: oklch(0.97 0.0016 106);
+  --muted-foreground: oklch(0.553 0.0117 58);
+  --accent: oklch(0.97 0.0016 106);
+  --accent-foreground: oklch(0.216 0.0061 56);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.923 0.0026 49);
+  --input: oklch(0.923 0.0026 49);
+  --ring: oklch(0.709 0.0104 56);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  /* Square corners everywhere. Every shadcn component derives its radius from
+     this one token, so nothing needs overriding per component. */
+  --radius: 0rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/**
+ * Storefront theme, scoped to the .shop wrapper so the admin panel keeps its
+ * plain monochrome. Redefining the tokens here means every existing utility
+ * (bg-background, text-muted-foreground, bg-primary…) shifts to this palette
+ * without touching component markup.
+ */
+.shop {
+  --background: #fffaf0; /* ivory paper */
+  --foreground: #1f2a1e; /* ink with a green cast */
+  --card: #ffffff;
+  --card-foreground: #1f2a1e;
+  --popover: #ffffff;
+  --popover-foreground: #1f2a1e;
+  --primary: #2d4a2b; /* logo green — buttons, links */
+  --primary-foreground: #fffaf0;
+  --secondary: #eef1e4;
+  --secondary-foreground: #1c2e1b;
+  --muted: #f7efe0;
+  --muted-foreground: #6d6a5c;
+  --accent: #fdf1d6; /* soft honey */
+  --accent-foreground: #1c2e1b;
+  --border: #eee2cc; /* warm sand, not grey */
+  --input: #e8dbc2;
+  --ring: #2d4a2b;
+  /* Soft and round, like the bars themselves. */
+  --radius: 0.875rem;
+}
+
+/**
+ * Admin theme, scoped to the .admin wrapper.
+ *
+ * Same brand hues as the shop — forest for actions, gold for attention — but
+ * over a cool slate ground instead of warm cream. The shop should feel like
+ * paper; the panel should feel like a workspace, so you always know which side
+ * of the app you are on.
+ */
+.admin {
+  --background: oklch(0.974 0.004 250); /* cool paper */
+  --foreground: oklch(0.22 0.02 255); /* slate ink */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.02 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.02 255);
+  --primary: #2d4a2b; /* logo green, same as the shop */
+  --primary-foreground: oklch(0.98 0.004 250);
+  --secondary: oklch(0.95 0.025 165);
+  --secondary-foreground: oklch(0.3 0.055 165);
+  --muted: oklch(0.958 0.006 250);
+  --muted-foreground: oklch(0.505 0.02 255);
+  --accent: oklch(0.95 0.025 165);
+  --accent-foreground: oklch(0.3 0.055 165);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.902 0.008 250);
+  --input: oklch(0.902 0.008 250);
+  --ring: #2d4a2b;
+  /* Softened from the hard squares — enough to look current, tighter than the
+     shop's so the panel still reads as denser and more tool-like. */
+  --radius: 0.375rem;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+/**
+ * Scroll reveal: .reveal sections rise into place as they scroll into view.
+ * Pure CSS (scroll-driven animation), so there is no script and nothing is
+ * ever hidden waiting for one. Browsers without animation-timeline, and anyone
+ * who prefers reduced motion, simply see the content in place.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
